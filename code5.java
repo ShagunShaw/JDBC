@@ -1,4 +1,4 @@
-// Learn to execute a INSERT request using JDBC in Java
+// Learn to execute a DELETE request using JDBC in Java
 
 
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class code2 {
+public class code5 {
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.load();
 
@@ -38,14 +38,14 @@ public class code2 {
 
             // Creating our Query Statement
             Statement stmt = conn.createStatement();
-            String Query = "insert into employees (id, name, job_title, salary) values (3, 'Alice Johnson', 'Data Scientist', 95000)";
+            String Query = "delete from employees where id= 3;";
 
             int rowsAffected = stmt.executeUpdate(Query);
             if(rowsAffected > 0) {
-                System.out.println("Insert successful, rows affected: " + rowsAffected);
+                System.out.println("Delete successful, rows affected: " + rowsAffected);
             } 
             else {
-                System.out.println("No rows inserted.");
+                System.out.println("Delete failed, no rows affected.");
             }
 
             // Closing the resources

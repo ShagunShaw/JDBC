@@ -1,10 +1,11 @@
-// Learn to execute a INSERT request using JDBC in Java
+// Learn to execute a GET request using JDBC in Java
 
 
 import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.sql.ResultSet;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -38,17 +39,20 @@ public class code3 {
 
             // Creating our Query Statement
             Statement stmt = conn.createStatement();
-            String Query = "insert into employees (id, name, job_title, salary) values (3, 'Alice Johnson', 'Data Scientist', 95000)";
+            ResultSet rs = stmt.executeQuery("select * from employees;");       // Dont forget the semicolon at the end of the query
 
-            int rowsAffected = stmt.executeUpdate(Query);
-            if(rowsAffected > 0) {
-                System.out.println("Insert successful, rows affected: " + rowsAffected);
-            } 
-            else {
-                System.out.println("No rows inserted.");
+            // Processing the Result
+            while (rs.next() == true) 
+            {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String job_title = rs.getString("job_title");
+                double salary = rs.getDouble("salary");
+                System.out.println("ID: " + id + ", Name: " + name + ", Job Title: " + job_title + ", Salary: " + salary);
             }
 
             // Closing the resources
+            rs.close();
             stmt.close();
         } 
         catch (SQLException e) 

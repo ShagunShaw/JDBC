@@ -1,14 +1,16 @@
-// Learn to execute a INSERT request using JDBC in Java
+// Prepared Statements in JDBC
 
 
 import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class code2 {
+public class code6 {
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.load();
 
@@ -36,20 +38,28 @@ public class code2 {
             System.out.println("Connection Object: " + conn);
 
 
-            // Creating our Query Statement
-            Statement stmt = conn.createStatement();
-            String Query = "insert into employees (id, name, job_title, salary) values (3, 'Alice Johnson', 'Data Scientist', 95000)";
+            /*   Creating our Query Statement using PreparedStatement instead of Statement   */
+            String Query = "select * from employees where id = ?";
 
-            int rowsAffected = stmt.executeUpdate(Query);
-            if(rowsAffected > 0) {
-                System.out.println("Insert successful, rows affected: " + rowsAffected);
+            // Statement stmt = conn.createStatement();                 instead of this we use PreparedStatement
+            PreparedStatement pstmt = conn.prepareStatement(Query);
+
+            pstmt.setInt(1, 2);
+
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()) {
+                System.out.println("Employee found:");
+                System.out.println("ID: " + rs.getInt("id"));
+                System.out.println("Name: " + rs.getString("name"));
+                System.out.println("Job Title: " + rs.getString("job_title"));
+                System.out.println("Salary: " + rs.getInt("salary"));
             } 
             else {
-                System.out.println("No rows inserted.");
+                System.out.println("No employee found with ID 2.");
             }
 
             // Closing the resources
-            stmt.close();
+            pstmt.close();
         } 
         catch (SQLException e) 
         {
