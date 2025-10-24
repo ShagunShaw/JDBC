@@ -1,3 +1,5 @@
+// The dockerfile of this particular program is located at 'F:\Development Docs\Docker\JDBC dockerfile of Hotel Management System\'
+
 import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -42,6 +44,7 @@ public class HotelReservationSystem {
 
                 System.out.print("Choose an option: ");
                 int choice = sc.nextInt();
+                sc.nextLine();           // Consume newline
 
                 switch (choice) {
                     case 1:
@@ -83,14 +86,15 @@ public class HotelReservationSystem {
         System.out.print("Enter customer name, room number, contact number: ");
         String customerName = sc.nextLine();
         int roomNumber = sc.nextInt();
-        int contactNumber = sc.nextInt();
+        sc.nextLine(); 
+        String contactNumber = sc.nextLine();
 
         try {
             String query = "INSERT INTO reservations (customer_name, room_number, contact_number) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.setString(1, customerName);
             pstmt.setInt(2, roomNumber);
-            pstmt.setInt(3, contactNumber);
+            pstmt.setString(3, contactNumber);
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -115,7 +119,7 @@ public class HotelReservationSystem {
                 System.out.println("Reservation ID: " + rs.getInt("id"));
                 System.out.println("Customer Name: " + rs.getString("customer_name"));
                 System.out.println("Room Number: " + rs.getInt("room_number"));
-                System.out.println("Contact Number: " + rs.getInt("contact_number"));
+                System.out.println("Contact Number: " + rs.getString("contact_number"));
                 System.out.println("-----------------------------");
             }
         } catch (SQLException e) {
@@ -126,6 +130,7 @@ public class HotelReservationSystem {
     private static void getRoomNumber(Connection conn, Scanner sc) {
         System.out.print("Enter reservation ID to get room number: ");
         int reservationId = sc.nextInt();
+        sc.nextLine();
 
         try {
             String query = "SELECT room_number FROM reservations WHERE id = ?";
@@ -147,6 +152,7 @@ public class HotelReservationSystem {
     private static void updateReservations(Connection conn, Scanner sc) {
         System.out.print("Enter reservation ID to update: ");
         int reservationId = sc.nextInt();
+        sc.nextLine(); 
 
         // now implement whatever fields you want to update here
     }
@@ -154,6 +160,7 @@ public class HotelReservationSystem {
     private static void deleteReservation(Connection conn, Scanner sc) {
         System.out.print("Enter reservation ID to delete: ");
         int reservationId = sc.nextInt();
+        sc.nextLine();
 
         try {
             String query = "DELETE FROM reservations WHERE id = ?";
